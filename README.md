@@ -1,7 +1,7 @@
 ums
 ===
 
-tools for handling UMS mail API responses.
+Tools for handling UMS mail API responses.
 
 A bit WIP, so don't look to close, ok :-)
 
