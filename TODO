@@ -1,0 +1,3 @@
+* Add fetch of UMS via imap or pop3
+* Move processed UMS messages to trash
+* Build nagios check around it.
