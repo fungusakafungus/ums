@@ -1,3 +1,4 @@
 * Add fetch of UMS via imap or pop3
+* Simulation mode
 * Move processed UMS messages to trash
-* Build nagios check around it.
+* Build nagios check around it, using github.com/laziac/go-nagios/nagios
