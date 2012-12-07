@@ -2,7 +2,6 @@ package ums
 
 import (
 	"encoding/xml"
-	"fmt"
 	"io"
 )
 
@@ -34,11 +33,4 @@ func NewDoc(r io.Reader) (imp *Import, err error) {
 	imp = &Import{}
 	err = xml.NewDecoder(r).Decode(imp)
 	return imp, err
-}
-
-func (a *Import) Dump(w io.Writer) {
-	_, err := fmt.Fprintf(w, "%+v", a)
-	if err != nil {
-		panic(err)
-	}
 }
