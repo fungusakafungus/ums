@@ -1,7 +1,6 @@
 package ums
 
 import (
-	"bufio"
 	"encoding/xml"
 	"fmt"
 	"io"
@@ -33,7 +32,7 @@ type Insert struct {
 // parses an UMS userdata import result and returns it
 func NewDoc(r io.Reader) (imp *Import, err error) {
 	imp = &Import{}
-	err = xml.NewDecoder(bufio.NewReader(r)).Decode(imp)
+	err = xml.NewDecoder(r).Decode(imp)
 	return imp, err
 }
 
