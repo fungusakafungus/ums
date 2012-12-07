@@ -2,7 +2,6 @@ package ums
 
 import (
 	"os"
-	"strings"
 	"testing"
 )
 
@@ -20,7 +19,7 @@ func TestUmsMail(t *testing.T) {
 	} else {
 		t.Logf("Initial parsing works\n")
 	}
-	if imp.Sucessful() {
+	if imp.Successful() {
 		t.Errorf("expected import failure here")
 	}
 }
