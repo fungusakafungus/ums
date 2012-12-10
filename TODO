@@ -1,4 +1,3 @@
-* Add fetch of UMS via imap or pop3 github.com/bytbox/go-pop3
 * Simulation mode
 * Move processed UMS messages to trash
-* Build nagios check around it, using github.com/laziac/go-nagios/nagios
+* add debian package directory
