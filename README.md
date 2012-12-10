@@ -3,8 +3,6 @@ ums
 
 Tools for handling UMS mail API responses.
 
-A bit WIP, so don't look to close, ok :-)
-
 
 [![Build Status][1]][2]
 
@@ -21,6 +19,15 @@ Then run
 
 	go get github.com/nightlyone/ums
 
+To build the nagios check
+
+	go get github.com/nightlyone/ums/cmd/ums_check
+	go install github.com/nightlyone/ums/cmd/ums_check
+
+Get usage of the nagios check
+
+	$GOPATH/bin/ums_check -h
+
 [3]: http://golang.org
 [4]: http://golang.org/doc/install/source
 [5]: http://golang.org/doc/install
@@ -32,11 +39,6 @@ BSD
 documentation
 -------------
 [package documentation at go.pkgdoc.org](http://go.pkgdoc.org/github.com/nightlyone/ums)
-
-install
--------------------
-	go get github.com/nightlyone/ums
-
 
 contributing
 ============
