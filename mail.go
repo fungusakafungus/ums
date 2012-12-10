@@ -6,8 +6,11 @@ import (
 	"mime"
 	"mime/multipart"
 	"net/mail"
+	"strings"
 )
 
+var XMLInterfaceSender = "<xmlinterface@fagms.net>"
+var ErrWrongSender = errors.New("Mail is not from API sender " + XMLInterfaceSender)
 var ErrNoMimeMail = errors.New("Mail is not a mime mail")
 var ErrNoBoundary = errors.New("Mail contains no boundary")
 var ErrNoMultipart = errors.New("Mail contains multipart/mixed type")
@@ -22,6 +25,9 @@ func ExtractImportResult(r io.Reader) (imp *Import, err error) {
 
 	if msg.Header.Get("MIME-Version") != "1.0" {
 		return nil, ErrNoMimeMail
+	}
+	if from := msg.Header.Get("From"); !strings.Contains(from, XMLInterfaceSender) {
+		return nil, ErrWrongSender
 	}
 	ct := msg.Header.Get("Content-Type")
 	media, params, err := mime.ParseMediaType(ct)
