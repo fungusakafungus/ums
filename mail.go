@@ -23,11 +23,11 @@ func ExtractImportResult(r io.Reader) (imp *Import, err error) {
 		return nil, err
 	}
 
-	if msg.Header.Get("MIME-Version") != "1.0" {
-		return nil, ErrNoMimeMail
-	}
 	if from := msg.Header.Get("From"); !strings.Contains(from, XMLInterfaceSender) {
 		return nil, ErrWrongSender
+	}
+	if msg.Header.Get("MIME-Version") != "1.0" {
+		return nil, ErrNoMimeMail
 	}
 	ct := msg.Header.Get("Content-Type")
 	media, params, err := mime.ParseMediaType(ct)
