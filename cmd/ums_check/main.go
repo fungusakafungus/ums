@@ -14,13 +14,15 @@ import (
 var acct struct {
 	Email    string
 	Password string
-	Server   string
+	Host     string
+	Port     string
 }
 
 func main() {
 	flag.StringVar(&acct.Email, "email", "", "email address")
 	flag.StringVar(&acct.Password, "password", "", "password")
-	flag.StringVar(&acct.Server, "server", "localhost", "pop3 server")
+	flag.StringVar(&acct.Host, "host", "localhost", "POP3 host")
+	flag.StringVar(&acct.Port, "port", "pop3s", "POP3 via SSL port")
 	flag.Parse()
 
 	if acct.Email == "" || acct.Password == "" {
@@ -28,7 +30,7 @@ func main() {
 		return
 	}
 
-	client, err := pop3.DialTLS(net.JoinHostPort(acct.Server, "995"))
+	client, err := pop3.DialTLS(net.JoinHostPort(acct.Host, acct.Port))
 	if err != nil {
 		defer nagios.Exit(nagios.UNKNOWN, err.Error())
 		return
