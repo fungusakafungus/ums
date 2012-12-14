@@ -22,6 +22,8 @@ var Account struct {
 
 var verbose bool
 
+var delete_after bool
+
 func info(format string, a ...interface{}) {
 	if verbose {
 		if !strings.HasSuffix(format, "\n") {
@@ -40,6 +42,7 @@ func main() {
 	flag.StringVar(&Account.Host, "host", "localhost", "POP3 host")
 	flag.StringVar(&Account.Port, "port", "pop3s", "POP3 via SSL port")
 	flag.BoolVar(&verbose, "verbose", false, "verbose logging on stderr")
+	flag.BoolVar(&delete_after, "delete_after", false, "delete email after processing it")
 	flag.Parse()
 
 	if Account.Email == "" || Account.Password == "" {
@@ -89,6 +92,17 @@ func main() {
 			defer nagios.Exit(nagios.UNKNOWN, err.Error())
 			return
 		}
+
+		if delete_after {
+			err := client.Dele(id)
+
+			if err != nil {
+				info("Error deleting processed mail %v, Error %v", id, err)
+			} else {
+				info("Deleted processed mail %v", id)
+			}
+		}
+
 		if imp.Successful() {
 			defer nagios.Exit(nagios.OK, "UMS import successful")
 			return
