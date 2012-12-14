@@ -93,7 +93,7 @@ func main() {
 			defer nagios.Exit(nagios.OK, "UMS import successful")
 			return
 		} else {
-			err := &ums.ImportError{imp}
+			err := &ums.ImportError{Import: imp}
 			defer nagios.Exit(nagios.WARNING, err.Error())
 			return
 		}
