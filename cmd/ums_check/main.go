@@ -20,10 +20,10 @@ var Account struct {
 	Port     string
 }
 
+// verbosity of operation
 var verbose bool
 
-var delete_after bool
-
+// small wrapper to abstract out verbosity and autoappend \n
 func info(format string, a ...interface{}) {
 	if verbose {
 		if !strings.HasSuffix(format, "\n") {
@@ -32,6 +32,9 @@ func info(format string, a ...interface{}) {
 		log.Printf(format, a...)
 	}
 }
+
+// whether we delete an email after processing it
+var delete_after bool
 
 func main() {
 	// disable date/time prefixes. Use logger, if you need timestamps
@@ -45,32 +48,44 @@ func main() {
 	flag.BoolVar(&delete_after, "delete_after", false, "delete email after processing it")
 	flag.Parse()
 
-	if Account.Email == "" || Account.Password == "" {
-		defer nagios.Exit(nagios.UNKNOWN, "invalid or missing comandline parameters. Use -h for help")
-		return
+	if !CheckArguments() {
+		state, message := nagios.UNKNOWN, "invalid or missing comandline parameters. Use -h for help"
+		nagios.Exit(state, message)
 	}
+
+	// The real plugin
+	state, message := ProcessMails()
+	nagios.Exit(state, message)
+}
+
+// Any argument checking goes here
+func CheckArguments() bool {
+	return Account.Email != "" && Account.Password != ""
+}
+
+// Process mails at configured POP3 account
+// and return a nagios state, including message reflecting what happened
+func ProcessMails() (state nagios.Status, message string) {
 
 	hp := net.JoinHostPort(Account.Host, Account.Port)
 	info("Dialing %v ...", hp)
 	client, err := pop3.DialTLS(hp)
 	if err != nil {
-		defer nagios.Exit(nagios.UNKNOWN, err.Error())
-		return
+		return nagios.UNKNOWN, err.Error()
 	}
 
+	// Send QUIT, so DELEted mails get expunged from the mailbox
 	defer client.Quit()
 
 	info("Authorizing as %v ...", Account.Email)
 	if err = client.Auth(Account.Email, Account.Password); err != nil {
-		defer nagios.Exit(nagios.UNKNOWN, err.Error())
-		return
+		return nagios.UNKNOWN, err.Error()
 	}
 
 	info("Retrieving messages ids ...")
 	msgId, _, err := client.ListAll()
 	if err != nil {
-		defer nagios.Exit(nagios.UNKNOWN, err.Error())
-		return
+		return nagios.UNKNOWN, err.Error()
 	}
 	info("Got %v message ids", len(msgId))
 
@@ -78,8 +93,7 @@ func main() {
 		info("Retrieving message %v/%v id = %v", i+1, len(msgId), id)
 		msg, err := client.Retr(id)
 		if err != nil {
-			defer nagios.Exit(nagios.UNKNOWN, err.Error())
-			return
+			return nagios.UNKNOWN, err.Error()
 		}
 		info("Retrieved %v bytes", len(msg))
 		imp, err := ums.ExtractImportResult(strings.NewReader(msg))
@@ -89,8 +103,7 @@ func main() {
 				info("Message %v is not for UMS check", msgId)
 				continue
 			}
-			defer nagios.Exit(nagios.UNKNOWN, err.Error())
-			return
+			return nagios.UNKNOWN, err.Error()
 		}
 
 		if delete_after {
@@ -104,14 +117,12 @@ func main() {
 		}
 
 		if imp.Successful() {
-			defer nagios.Exit(nagios.OK, "UMS import successful")
-			return
+			return nagios.OK, "UMS import successful"
 		} else {
 			err := &ums.ImportError{Import: imp}
-			defer nagios.Exit(nagios.WARNING, err.Error())
-			return
+			return nagios.WARNING, err.Error()
 		}
 	}
 
-	defer nagios.Exit(nagios.OK, "No mails for us")
+	return nagios.OK, "No mails for us"
 }
