@@ -58,7 +58,7 @@ production usage, deleting all processed mails
 
 	define command{
 		command_name    check_ums
-		command_line    /usr/lib/nagios/plugins/check_ums -delete_after -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
+		command_line    /usr/lib/nagios/plugins/check_ums -delete_after=true -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
 		}
 
 test usage, NOT deleting processed mails
