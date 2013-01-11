@@ -9,6 +9,7 @@ import (
 	"github.com/laziac/go-nagios/nagios"
 	"github.com/nightlyone/ums"
 
+	"code.google.com/p/goconf/conf"
 	pop3 "github.com/bytbox/go-pop3"
 )
 
@@ -19,6 +20,10 @@ var Account struct {
 	Host     string
 	Port     string
 }
+
+// we also accept and ini style config file for the account info,
+// but command line takes priority
+var Configfile string
 
 // verbosity of operation
 var verbose bool
@@ -44,6 +49,7 @@ func main() {
 	flag.StringVar(&Account.Password, "password", "", "password")
 	flag.StringVar(&Account.Host, "host", "localhost", "POP3 host")
 	flag.StringVar(&Account.Port, "port", "pop3s", "POP3 via SSL port")
+	flag.StringVar(&Configfile, "config", "", "ini style config for account info in section [ums]")
 	flag.BoolVar(&verbose, "verbose", false, "verbose logging on stderr")
 	flag.BoolVar(&delete_after, "delete_after", false, "delete email after processing it")
 	flag.Parse()
@@ -58,8 +64,32 @@ func main() {
 	nagios.Exit(state, message)
 }
 
+func MergeConfig() {
+	if Configfile == "" {
+		return
+	}
+	config, err := conf.ReadConfigFile(Configfile)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+	getdef := func(key, default_value string) string {
+		value, err := config.GetString("ums", key)
+		if err == nil && value != "" {
+			return value
+		}
+		return default_value
+	}
+	Account.Email = getdef("Email", Account.Email)
+	Account.Password = getdef("Password", Account.Password)
+	Account.Host = getdef("Host", Account.Host)
+	// Port is also a string, because we also accept sth. like pop3s here
+	Account.Port = getdef("Port", Account.Port)
+}
+
 // Any argument checking goes here
 func CheckArguments() bool {
+	MergeConfig()
 	return Account.Email != "" && Account.Password != ""
 }
 

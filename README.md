@@ -67,3 +67,18 @@ test usage, NOT deleting processed mails
 		command_name    check_ums_test
 		command_line    /usr/lib/nagios/plugins/check_ums -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
 		}
+
+if you have all your credentials in a special ini-style nagios config, you can also try adding a secion like this
+
+	[ums]
+	Email = umsbots@example.com
+	Password = secr3t
+	Host = pop3.example.com
+	Port = pop3s
+
+and then use the plugin this way
+
+	define command{
+		command_name    check_ums
+		command_line    /usr/lib/nagios/plugins/check_ums -delete_after=true -config=$ARG1$
+		}
