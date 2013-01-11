@@ -52,3 +52,18 @@ enable commit hooks via
 
         cd .git ; rm -rf hooks; ln -s ../git-hooks hooks ; cd ..
 
+usage of nagios plugin
+----------------------
+production usage, deleting all processed mails
+
+	define command{
+		command_name    check_ums
+		command_line    /usr/lib/nagios/plugins/ums_check -delete_after -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
+		}
+
+test usage, NOT deleting processed mails
+
+	define command{
+		command_name    check_ums_test
+		command_line    /usr/lib/nagios/plugins/ums_check -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
+		}

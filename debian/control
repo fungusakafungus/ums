@@ -9,7 +9,7 @@ Vcs-Git: git://github.com/nightlyone/ums.git
 
 Package: ums
 Architecture: amd64
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, nagios-plugins-common
 Recommends: nagios-plugins
 Description: Tools for handling UMS mail API responses.
  Tools for handling UMS mail API responses.

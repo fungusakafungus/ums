@@ -8,6 +8,19 @@
 
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
+#export DH_OPTIONS=-v
 
 %:
-	dh $@ 
+	dh $@ --parallel
+
+override_dh_auto_test:
+	go test ./...
+
+override_dh_auto_build:
+	go build ./...
+
+override_dh_install:
+	dh_install --sourcedir=$$GOPATH/bin ums_check $(DESTDIR)/usr/lib/nagios/plugins
+
+# These are not needed for go programs
+override_dh_pysupport override_dh_pysupport2 override_dh_perl override_dh_auto_configure:
