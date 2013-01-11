@@ -21,12 +21,12 @@ Then run
 
 To build the nagios check
 
-	go get github.com/nightlyone/ums/cmd/ums_check
-	go install github.com/nightlyone/ums/cmd/ums_check
+	go get github.com/nightlyone/ums/cmd/check_ums
+	go install github.com/nightlyone/ums/cmd/check_ums
 
 Get usage of the nagios check
 
-	$GOPATH/bin/ums_check -h
+	$GOPATH/bin/check_ums -h
 
 [3]: http://golang.org
 [4]: http://golang.org/doc/install/source
@@ -58,12 +58,12 @@ production usage, deleting all processed mails
 
 	define command{
 		command_name    check_ums
-		command_line    /usr/lib/nagios/plugins/ums_check -delete_after -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
+		command_line    /usr/lib/nagios/plugins/check_ums -delete_after -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
 		}
 
 test usage, NOT deleting processed mails
 
 	define command{
 		command_name    check_ums_test
-		command_line    /usr/lib/nagios/plugins/ums_check -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
+		command_line    /usr/lib/nagios/plugins/check_ums -host=$ARG2$ -email=$ARG1$ -password=$ARG3$
 		}

@@ -13,4 +13,4 @@ Depends: ${shlibs:Depends}, ${misc:Depends}, nagios-plugins-common
 Recommends: nagios-plugins
 Description: Tools for handling UMS mail API responses.
  Tools for handling UMS mail API responses.
- Includes ums_check, which is a nagios plugin
+ Includes check_ums, which is a nagios plugin

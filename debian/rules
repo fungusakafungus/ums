@@ -20,7 +20,7 @@ override_dh_auto_build:
 	go build ./...
 
 override_dh_install:
-	dh_install --sourcedir=$$GOPATH/bin ums_check $(DESTDIR)/usr/lib/nagios/plugins
+	dh_install --sourcedir=$$GOPATH/bin check_ums $(DESTDIR)/usr/lib/nagios/plugins
 
 # These are not needed for go programs
 override_dh_pysupport override_dh_pysupport2 override_dh_perl override_dh_auto_configure:
