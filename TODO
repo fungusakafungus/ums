@@ -1,3 +1,5 @@
 * Simulation mode
-* Move processed UMS messages to trash
-* add debian package directory
+* Convert this edge triggered check to a livel triggered one
+  + use statefile
+  + or make it sticky
+  + or use nagios stalking

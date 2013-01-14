@@ -154,5 +154,6 @@ func ProcessMails() (state nagios.Status, message string) {
 		}
 	}
 
+	// TODO(nightlyone): Use statefile, make it sticky or use nagios stalking
 	return nagios.OK, "No mails for us"
 }
