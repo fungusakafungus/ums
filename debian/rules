@@ -11,7 +11,6 @@
 #export DH_OPTIONS=-v
 
 GO_PACKAGE=github.com/nightlyone/ums
-echo GO_PACKAGE=github.com/nightlyone/ums
 
 export GOPATH=$(CURDIR)/debian/go_build
 
@@ -21,13 +20,13 @@ export GOPATH=$(CURDIR)/debian/go_build
 override_dh_auto_configure:
 	mkdir -p $(GOPATH)/src/$(dir $(GO_PACKAGE))
 	ln -s ../../../../../ $(GOPATH)/src/$(GO_PACKAGE)
-	go get $(GO_PACKAGE)/...
+	go get $(GO_PACKAGE)
 
 override_dh_auto_test:
-	go test $(GO_PACKAGE)/...
+	go test $(GO_PACKAGE)
 
 override_dh_auto_build:
-	go build $(GO_PACKAGE)/...
+	go build $(GO_PACKAGE)/cmd/check_ums
 
 override_dh_install:
 	dh_install --sourcedir=$(GOPATH)/bin check_ums $(DESTDIR)/usr/lib/nagios/plugins
