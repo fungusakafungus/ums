@@ -13,6 +13,10 @@
 %:
 	dh $@ --parallel
 
+override_dh_prepare:
+	go get github.com/nightlyone/ums
+	dh_prepare
+
 override_dh_auto_test:
 	go test ./...
 
