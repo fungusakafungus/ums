@@ -2,7 +2,7 @@ Source: ums
 Section: admin
 Priority: extra
 Maintainer: Ingo Oeser <nightlyone@googlemail.com>
-Build-Depends: debhelper (>= 8.0.0), golang-go
+Build-Depends: debhelper (>= 8.0.0), golang-go, git-core, mercurial
 Standards-Version: 3.9.2
 Homepage: https://github.com/nightlyone/ums
 Vcs-Git: git://github.com/nightlyone/ums.git

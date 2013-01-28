@@ -1,3 +1,9 @@
+ums (0.2) unstable; urgency=low
+
+  * Packaging
+
+ -- Ilya Margolin <ilya@jimdo.com>  Mon, 28 Jan 2013 14:24:06 +0100
+
 ums (0.1) unstable; urgency=low
 
   * Initial Release.
